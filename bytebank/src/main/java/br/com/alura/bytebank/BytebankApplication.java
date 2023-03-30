@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class BytebankApplication {
 
     private static ContaService service = new ContaService();
-    private static Scanner teclado = new Scanner(System.in).useDelimiter("\n");
-
+    private static Scanner teclado = new Scanner(System.in);
+    
     public static void main(String[] args) {
         var opcao = exibirMenu();
         while (opcao != 7) {
@@ -137,4 +137,5 @@ public class BytebankApplication {
         System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
         teclado.next();
     }
+    
 }
