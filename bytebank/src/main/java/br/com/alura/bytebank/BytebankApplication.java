@@ -88,6 +88,19 @@ public class BytebankApplication {
         System.out.println("Conta aberta com sucesso!");
         System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
         teclado.next();
+        
+//      Após a criação de uma conta:
+//      Executamos o seguinte código no terminal MySQL 
+//      
+//      SELECT * FROM conta;
+        
+//      A conta criada deverá aparecer assim:
+//	    +--------+-------+--------------+-------------+------------------+
+//	    | numero | saldo | cliente_nome | cliente_cpf | cliente_email    |
+//	    +--------+-------+--------------+-------------+------------------+
+//	    |   2222 |     0 | Junior       | 12345678    | junior@alura.com |
+//	    +--------+-------+--------------+-------------+------------------+
+//	    1 row in set (0.00 sec)
     }
 
     private static void encerrarConta() {
