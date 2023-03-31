@@ -19,7 +19,7 @@ public class ContaDAO {
 		this.conn = connection;
 	}
 
-	public void Salvar(DadosAberturaConta dadosDaConta) {
+	public void salvar(DadosAberturaConta dadosDaConta) {
 		var cliente = new Cliente(dadosDaConta.dadosCliente());
 		var conta = new Conta(dadosDaConta.numero(), cliente);
 		String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)"
@@ -40,7 +40,7 @@ public class ContaDAO {
 		}
 	}
 	
-	public Set<Conta> Listar() {
+	public Set<Conta> listar() {
 		Set<Conta> contas = new HashSet<>();
 			
 		String sql = "SELECT * FROM conta"; 
