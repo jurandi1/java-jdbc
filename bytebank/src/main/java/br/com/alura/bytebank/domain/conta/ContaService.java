@@ -55,7 +55,8 @@ public class ContaService {
 		}
 
 		Connection conn = connection.recuperarConexao();
-		new ContaDAO(conn).alterar(conta.getNumero(), valor);;
+		BigDecimal novoValor = conta.getSaldo().add(valor);
+		new ContaDAO(conn).alterar(conta.getNumero(), novoValor);
 		
 	}
 
