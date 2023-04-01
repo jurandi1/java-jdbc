@@ -21,7 +21,7 @@ public class ContaDAO {
 
 	public void salvar(DadosAberturaConta dadosDaConta) {
 		var cliente = new Cliente(dadosDaConta.dadosCliente());
-		var conta = new Conta(dadosDaConta.numero(), cliente);
+		var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO,  cliente);
 		String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)"
 				+ "VALUES (?, ?, ?, ?, ?) ";
 
