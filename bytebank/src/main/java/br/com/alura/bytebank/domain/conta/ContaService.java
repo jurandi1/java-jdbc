@@ -59,6 +59,12 @@ public class ContaService {
 		new ContaDAO(conn).alterar(conta.getNumero(), novoValor);
 		
 	}
+	
+	public void realizarTransferencia(Integer numeroDaContaOrigem, Integer numeroDaContaDestino, BigDecimal valor) {
+		this.realizarSaque(numeroDaContaOrigem, valor);
+		this.realizarDeposito(numeroDaContaDestino, valor);
+	}
+	
 
 	public void encerrar(Integer numeroDaConta) {
 		var conta = buscarContaPorNumero(numeroDaConta);
