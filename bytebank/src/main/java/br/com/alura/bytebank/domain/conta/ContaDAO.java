@@ -21,7 +21,7 @@ public class ContaDAO {
 
 	public void salvar(DadosAberturaConta dadosDaConta) {
 		var cliente = new Cliente(dadosDaConta.dadosCliente());
-		var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO,  cliente);
+		var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente);
 		String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)"
 				+ "VALUES (?, ?, ?, ?, ?) ";
 
@@ -41,18 +41,18 @@ public class ContaDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Set<Conta> listar() {
 		PreparedStatement ps;
 		ResultSet resultSet;
 		Set<Conta> contas = new HashSet<>();
-			
-		String sql = "SELECT * FROM conta"; 
-		
+
+		String sql = "SELECT * FROM conta";
+
 		try {
 			ps = conn.prepareStatement(sql);
 			resultSet = ps.executeQuery();
-			
+
 			while (resultSet.next()) {
 				Integer numero = resultSet.getInt(1);
 				BigDecimal saldo = resultSet.getBigDecimal(2);
@@ -66,65 +66,69 @@ public class ContaDAO {
 			resultSet.close();
 			ps.close();
 			conn.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return contas;
 	}
-	
+
 	public void alterar(Integer numero, BigDecimal valor) {
 		PreparedStatement ps;
 		String sql = "UPDATE conta SET saldo = ? WHERE numero = ?";
-		
+
 		try {
+			conn.setAutoCommit(false);
+
 			ps = conn.prepareStatement(sql);
-			
+
 			ps.setBigDecimal(1, valor);
 			ps.setInt(2, numero);
-			
+
 			ps.execute();
+			conn.commit();
 			ps.close();
 			conn.close();
-		} catch(SQLException e) {
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException ex) {
+				throw new RuntimeException(ex);
+			}
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public Conta listarPorNumero(Integer numero) {
-        String sql = "SELECT * FROM conta WHERE numero = ?";
+		String sql = "SELECT * FROM conta WHERE numero = ?";
 
-        PreparedStatement ps;
-        ResultSet resultSet;
-        Conta conta = null;
-        try {
-            ps = conn.prepareStatement(sql);
-            ps.setInt(1, numero);
-            resultSet = ps.executeQuery();
+		PreparedStatement ps;
+		ResultSet resultSet;
+		Conta conta = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, numero);
+			resultSet = ps.executeQuery();
 
-            while (resultSet.next()) {
-                Integer numeroRecuperado = resultSet.getInt(1);
-                BigDecimal saldo = resultSet.getBigDecimal(2);
-                String nome = resultSet.getString(3);
-                String cpf = resultSet.getString(4);
-                String email = resultSet.getString(5);
+			while (resultSet.next()) {
+				Integer numeroRecuperado = resultSet.getInt(1);
+				BigDecimal saldo = resultSet.getBigDecimal(2);
+				String nome = resultSet.getString(3);
+				String cpf = resultSet.getString(4);
+				String email = resultSet.getString(5);
 
-                DadosCadastroCliente dadosCadastroCliente =
-                        new DadosCadastroCliente(nome, cpf, email);
-                Cliente cliente = new Cliente(dadosCadastroCliente);
+				DadosCadastroCliente dadosCadastroCliente = new DadosCadastroCliente(nome, cpf, email);
+				Cliente cliente = new Cliente(dadosCadastroCliente);
 
-                conta = new Conta(numeroRecuperado, saldo, cliente);
-            }
-            resultSet.close();
-            ps.close();
-            conn.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return conta;
-    }
-	
-	
-	
-	
+				conta = new Conta(numeroRecuperado, saldo, cliente);
+			}
+			resultSet.close();
+			ps.close();
+			conn.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		return conta;
+	}
+
 }
